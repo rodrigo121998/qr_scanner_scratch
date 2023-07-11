@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ['QR_CODE']
+
+roboflow:
+  workspace: rodrigo-andre-osorio-lopez
+  project: qr-code-yjldd
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/rodrigo-andre-osorio-lopez/qr-code-yjldd/dataset/1

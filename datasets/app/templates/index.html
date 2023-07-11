@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>QR Code Scanner</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+      <div class="text-center">
+        <h1 class="mt-5">QR Code Scanner</h1>
+      </div>
+      <form class="form-group" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="upload-image">Seleccionar imagen:</label>
+          <input type="file" class="form-control-file" name="image" id="upload-image" onchange="previewImage()" accept="image/png, image/jpeg, image/jpg">
+        </div>
+        <button id="upload-button" class="btn btn-primary" disabled>Upload</button>
+      </form>
+      <!-- <div id="result-section" class="d-none"> -->
+        <div id="result-section">
+        <div class="row">
+          <div class="col-6">
+            <img id="original-image" src="" alt="Imagen original" class="img-fluid">
+            <!-- <img src="{{url_for('upload', filename='default.png')}}" id="image" class="img-fluid"> -->
+          </div>
+          <div class="col-6">
+            <img id="result-image" src="" alt="Imagen con QR detectado" class="img-fluid">
+            <p id="result-text" class="text-center"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Habilitar botón de upload al seleccionar imagen
+      document.getElementById('upload-image').addEventListener('change', function() {
+        document.getElementById('upload-button').disabled = false;
+      });
+
+    // Manejar evento de click en botón de upload
+    document.getElementById('upload-button').addEventListener('click', function(event) {
+        event.preventDefault();
+        // Obtener datos de la imagen
+        let image = document.getElementById('upload-image').files[0];
+        let formData = new FormData();
+        formData.append('image', image);
+        // Realizar petición POST a /qr_decode
+        fetch('/qr_decode', {
+          method: 'POST',
+          body: formData
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.data) {
+              // Mostrar sección de resultados
+              document.getElementById('result-section').classList.remove('d-none');
+              // Mostrar imágenes
+              document.getElementById('original-image').src = URL.createObjectURL(image);
+              document.getElementById('result-image').src = 'data:image/jpg;base64,' + data.qr_img;
+              // Mostrar texto del QR
+              document.getElementById('result-text').textContent = data.data;
+            } else {
+              alert('QR no detectado');
+            }
+          })
+          .catch(error => console.error(error));
+      });
+    </script>
+
+
+<script>
+  function previewImage(){
+      var file = document.querySelector('input[type=file]').files[0];
+      var reader = new FileReader();
+      reader.addEventListener("load", function () {
+          var image = document.querySelector('#original-image');
+          image.src = reader.result;
+      }, false);
+      if (file) {
+          reader.readAsDataURL(file);
+      }
+  }
+</script>
+
+<script>
+  function uploadImage() {
+      event.preventDefault();
+      let image = document.getElementById("file").files[0];
+      let formData = new FormData();
+      formData.append("image", image);
+      fetch('/', {
+          method: 'POST',
+          body: formData
+      })
+      .then(response => response.text())
+      .then(data => {
+          document.getElementById("outputImage").innerHTML = `<img src='${data}'/>`;
+      });
+}
+</script>
+
+  </body>
+</html>
