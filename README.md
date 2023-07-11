@@ -54,6 +54,9 @@ python index.py
 
 3. Use http://127.0.0.1:5000 link to use app
 
+![image](https://github.com/rodrigo121998/qr_scanner_scratch/assets/66456730/07bf3c33-43d9-401d-a975-2d3f49452ee1)
+
+
 The app is built using Flask. The frontend interface can be found in the `templates` folder, specifically in the `index.html` file. The backend logic for QR code detection and decoding is implemented in `main.py` within the `src` folder. The `qr_decode`function, located in `main.py` , performs the required tasks of detecting and decoding QR codes.
 
 Feel free to explore the app, upload images, and see the QR codes being detected and decoded in real time.
